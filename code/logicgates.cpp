@@ -1,7 +1,7 @@
 #include "logicgates.h"
 #include <stdbool.h>
 
-void UpdateTwoInANDgate(TwoInANDgate *ANDgate){
+void UpdateTwoInANDgate(In2Out1* ANDgate){
   if(!ANDgate->AInput->signal) {
     UpdateBit(false, &ANDgate->result);
     return;
@@ -14,7 +14,7 @@ void UpdateTwoInANDgate(TwoInANDgate *ANDgate){
   return;
 }
 
-void UpdateThreeInANDgate(ThreeInANDgate *ANDgate){
+void UpdateThreeInANDgate(In3Out1* ANDgate){
   if(!ANDgate->AInput->signal) {
     UpdateBit(false, &ANDgate->result);
     return;
@@ -31,7 +31,17 @@ void UpdateThreeInANDgate(ThreeInANDgate *ANDgate){
   return;
 }
 
-void UpdateTwoInORgate(TwoInORgate *ORgate) {
+void UpdateTwoInNANDgate(In2Out1* ANDgate) {
+  UpdateTwoInANDgate(ANDgate);
+  InvertBit(&ANDgate->result);
+}
+
+void UpdateThreeInNANDgate(In3Out1* ANDgate) {
+  UpdateThreeInANDgate(ANDgate);
+  InvertBit(&ANDgate->result);
+}
+
+void UpdateTwoInORgate(In2Out1 *ORgate) {
   if(ORgate->AInput->signal) {
     UpdateBit(true, &ORgate->result); 
     return;
@@ -44,7 +54,7 @@ void UpdateTwoInORgate(TwoInORgate *ORgate) {
   return;
 }
 
-void UpdateThreeInORgate(ThreeInORgate *ORgate) {
+void UpdateThreeInORgate(In3Out1* ORgate) {
   if(ORgate->AInput->signal) {
     UpdateBit(true, &ORgate->result); 
     return;
@@ -60,3 +70,27 @@ void UpdateThreeInORgate(ThreeInORgate *ORgate) {
   UpdateBit(false, &ORgate->result);
   return;
 }
+
+void UpdateTwoInNORgate(In2Out1* ORgate) {
+  UpdateTwoInORgate(ORgate);
+  InvertBit(&ORgate->result);
+}
+
+void UpdateThreeInNORgate(In3Out1* ORgate) {
+  UpdateThreeInORgate(ORgate);
+  InvertBit(&ORgate->result);
+}
+
+void SetupXORgate(XORgate* XORgate) {
+  XORgate->ANDgate.AInput = &XORgate->ORgate.result;
+  XORgate->ANDgate.BInput = &XORgate->NANDgate.result;
+}
+
+void UpdateTwoInXORgate(XORgate* XORgate) {
+  UpdateTwoInORgate(&XORgate->ORgate);
+  UpdateTwoInNANDgate(&XORgate->NANDgate);
+  UpdateTwoInANDgate(&XORgate->ANDgate);
+
+  XORgate->result = XORgate->ANDgate.result;
+}
+

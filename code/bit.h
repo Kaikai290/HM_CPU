@@ -7,3 +7,5 @@ typedef struct bit {
 } bit;
 
 void UpdateBit(bool signal, bit* bit);
+
+void InvertBit(bit* bit);

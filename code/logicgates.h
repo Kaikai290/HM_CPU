@@ -1,35 +1,41 @@
 #include "bit.h"
 
-typedef struct TwoInANDgate {
+typedef struct In2Out1 {
   bit result;
   bit* AInput;
   bit* BInput;
-} TwoInANDgate;
+} In2Out1;
 
-typedef struct ThreeInANDgate {
-  bit result;
-  bit* AInput;
-  bit* BInput;
-  bit* CInput;
-} ThreeInANDgate;
-
-typedef struct TwoInORgate {
-  bit result;
-  bit* AInput;
-  bit* BInput;
-} TwoInORgate;
-
-typedef struct ThreeInORgate {
+typedef struct In3Out1 {
   bit result;
   bit* AInput;
   bit* BInput;
   bit* CInput;
-} ThreeInORgate;
+} In3Out1;
 
-void UpdateTwoInANDgate(TwoInANDgate* ANDgate);
+typedef struct XORgate {
+  bit result;
+  In2Out1 ORgate;
+  In2Out1 NANDgate;
+  In2Out1 ANDgate;
+}XORgate;
 
-void UpdateThreeInANDgate(ThreeInANDgate* ANDgate);
+void UpdateTwoInANDgate(In2Out1* ANDgate);
 
-void UpdateTwoInORgate(TwoInORgate* ORgate);
+void UpdateThreeInANDgate(In3Out1* ANDgate);
 
-void UpdateThreeInORgate(ThreeInORgate* ORgate);
+void UpdateTwoInNANDgate(In2Out1* ANDgate);
+
+void UpdateThreeInNANDgate(In3Out1* ANDgate);
+
+void UpdateTwoInORgate(In2Out1* ORgate);
+
+void UpdateThreeInORgate(In3Out1* ORgate);
+
+void UpdateTwoInNORgate(In2Out1* ORgate);
+
+void UpdateThreeInNORgate(In3Out1* ORgate);
+
+void SetupXORgate(XORgate* XORgate);
+
+void UpdateTwoInXORgate(XORgate* XORgate);
